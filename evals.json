@@ -1,0 +1,117 @@
+{
+  "skill_name": "data-analysis-journalism",
+  "eval_protocol": "Activate the skill, run the prompt verbatim, grade each scoring_criteria item pass/fail. Eval passes if all criteria met.",
+  "evals": [
+    {
+      "id": "DA-01",
+      "prompt": "Ik heb een DataFrame met CBS buurtdata over woningen: kolommen zijn o.a. WijkenEnBuurten (buurtcodes), Aantal inwoners, Gemiddelde WOZ-waarde van woningen, Eenpersoonshuishoudens. Analyseer dit volledig voor verhaalleads.",
+      "expected_output": "Runs all 8 steps in order, produces structured journalistic output",
+      "scoring_criteria": [
+        "Runs shape/dtypes check (Stap 1)",
+        "Flags mean vs median divergence (Stap 2)",
+        "Shows top 5 AND bottom 5 rankings (Stap 3)",
+        "Computes year-over-year trends if temporal data present, or notes no time dimension (Stap 4)",
+        "Groups by category for comparison (Stap 5)",
+        "Uses IQR method for outlier detection (Stap 6)",
+        "Reports correlations with ecological fallacy warning (Stap 7)",
+        "Checks for missing value patterns (Stap 8)",
+        "Output includes 'Hoofdbevinding' section",
+        "Output includes 'Kerngetallen' section",
+        "Output includes 'Uitschieters en verrassingen' section",
+        "Output includes 'Kanttekeningen' section",
+        "Output includes 'Vervolgvragen' section"
+      ],
+      "files": []
+    },
+    {
+      "id": "DA-02",
+      "prompt": "Ik heb een DataFrame met gemeenten en hun percentage eigenaar-bewoners. Maak een ranking en vergelijk met het landelijk gemiddelde.",
+      "expected_output": "Top 5 + Bottom 5, each row shows deviation from national average",
+      "scoring_criteria": [
+        "Shows BOTH top 5 AND bottom 5 (not just top 10)",
+        "Computes the national average first and shows it",
+        "Each ranked entry includes deviation from national average (e.g. '3x het landelijk gemiddelde' or '+15 procentpunt')",
+        "Does NOT just show raw values without context",
+        "Computes the median as well as mean"
+      ],
+      "files": []
+    },
+    {
+      "id": "DA-03",
+      "prompt": "Mijn kolom 'woningwaarde' heeft een gemiddelde van €485.000 en een mediaan van €285.000. Wat betekent dit?",
+      "expected_output": "Flags the divergence, explains outliers/skew, does not just report numbers",
+      "scoring_criteria": [
+        "Identifies that mean significantly exceeds median (skewed distribution)",
+        "Explains this implies outliers (very expensive properties) pulling up the mean",
+        "Suggests using median as more representative for journalism",
+        "Does NOT just print 'gemiddelde is X, mediaan is Y' without interpretation",
+        "Suggests investigating the outliers as potential story leads"
+      ],
+      "files": []
+    },
+    {
+      "id": "DA-04",
+      "prompt": "Ik heb een DataFrame met gemeenten en hun percentage zonnepanelen. Vind de uitschieters.",
+      "expected_output": "IQR method, frames as story leads with deviation from national average",
+      "scoring_criteria": [
+        "Uses IQR method (Q1, Q3, 1.5*IQR bounds) — not just zscore or eyeballing",
+        "Shows each outlier with its deviation from the national average (not just raw value)",
+        "Frames outliers as potential story leads ('Zeewolde heeft 3x het landelijk gemiddelde — potentieel verhaal')",
+        "Shows BOTH high outliers AND low outliers",
+        "Does NOT use the word 'anomaly' or 'anomalie' without journalistic framing"
+      ],
+      "files": []
+    },
+    {
+      "id": "DA-05",
+      "prompt": "Ik heb jaarlijkse data over het percentage woningen aangesloten op aardgas, van 2018 tot 2023 per provincie. Analyseer de trends.",
+      "expected_output": "Percentage and absolute YoY change, direction reversals, small N warning",
+      "scoring_criteria": [
+        "Computes year-over-year percentage change ((new-old)/old * 100)",
+        "Computes year-over-year absolute change as well",
+        "Identifies which province has the largest decline",
+        "Attempts to find inflection points (where trend direction reverses)",
+        "Includes warning if sample basis is small (though N here is provinces, so it's OK to note this is reliable at province level)"
+      ],
+      "files": []
+    },
+    {
+      "id": "DA-06",
+      "prompt": "Ik zie een sterke correlatie (r=0.82) tussen gemiddeld inkomen per gemeente en percentage zonnepanelen per gemeente. Kan ik concluderen dat rijkere mensen vaker zonnepanelen hebben?",
+      "expected_output": "Reports correlation, includes ecological fallacy warning",
+      "scoring_criteria": [
+        "Reports the correlation value and whether it's significant",
+        "Explicitly warns about the ecological fallacy (commune-level correlation does not equal individual-level causation)",
+        "Uses language like 'dit bewijst geen oorzakelijk verband op individueel niveau'",
+        "Suggests follow-up research at individual level to confirm",
+        "Does NOT state 'rijkere mensen hebben vaker zonnepanelen' as a conclusion"
+      ],
+      "files": []
+    },
+    {
+      "id": "DA-07",
+      "prompt": "Ik merk dat veel gemeenten in een bepaalde regio ontbrekende waarden hebben in de kolom 'energielabel_pct'. Hoe analyseer ik dit?",
+      "expected_output": "Groups missingness geographically, flags >20%, poses journalistic follow-up",
+      "scoring_criteria": [
+        "Groups or maps missingness by region/municipality",
+        "Flags municipalities with >20% missing values specifically",
+        "Poses the journalistic question: 'Waarom rapporteert deze gemeente niet?'",
+        "Treats missing data as a potential story (not just a data quality problem)",
+        "Shows code to visualize or tabulate missingness by region"
+      ],
+      "files": []
+    },
+    {
+      "id": "DA-08",
+      "prompt": "Maak een staafdiagram van de top 10 gemeenten op percentage zonnepanelen.",
+      "expected_output": "Redirects to data-viz-journalism, still provides analysis output",
+      "scoring_criteria": [
+        "Does NOT generate chart code inline (no alt.Chart, plt.bar, px.bar etc.)",
+        "Explicitly redirects to 'data-viz-journalism' skill for visualization",
+        "Still produces the ranked top 10 list as a DataFrame or table (the analysis part)",
+        "Explains what the chart should show (hands off a clear brief to data-viz-journalism)"
+      ],
+      "files": []
+    }
+  ]
+}
